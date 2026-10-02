@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.css";
 
 const snippets = {
@@ -26,6 +26,13 @@ X_train, X_test = split(preprocess(df))
 model = fit(X_train)
 print(evaluate(model, X_test))`,
   },
+};
+
+const palettes = {
+  teal: ["#0d1b22", "#6fcfb0", "#f2a65a"],
+  violet: ["#14122b", "#8b9cff", "#ff8fb1"],
+  burgundy: ["#1c1018", "#ff9e7a", "#c9a0ff"],
+  paper: ["#f4f7f5", "#1f8a70", "#c9722a"],
 };
 
 const skills = [
@@ -86,6 +93,10 @@ const projects = [
 
 function App() {
   const [tab, setTab] = useState("Frontend");
+  const [theme, setTheme] = useState("teal");
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
   const snip = snippets[tab];
   const tone = tab === "Model" ? "ml" : "web";
 
@@ -279,6 +290,18 @@ function App() {
           </div>
         </section>
       </main>
+
+      <div className="palettes" aria-label="Color palette preview">
+        {Object.entries(palettes).map(([name, [bg, a, b]]) => (
+          <button
+            key={name}
+            title={name}
+            aria-pressed={theme === name}
+            onClick={() => setTheme(name)}
+            style={{ background: `linear-gradient(135deg, ${bg} 40%, ${a} 40% 70%, ${b} 70%)` }}
+          />
+        ))}
+      </div>
 
       <footer>
         <div className="container footer-content">
