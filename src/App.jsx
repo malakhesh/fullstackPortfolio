@@ -186,7 +186,7 @@ function App() {
         <section id="skills" className="section soft-section">
           <div className="container">
             <div className="section-heading">
-              <h2>Two toolkits, one workflow</h2>
+              <h2>Technical stack</h2>
               <p>
                 <span className="key web" /> Web development
                 <span className="key ml" /> Data and ML
