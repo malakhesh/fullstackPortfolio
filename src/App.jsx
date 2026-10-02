@@ -84,55 +84,12 @@ const projects = [
     tags: ["HTML", "CSS", "JavaScript", "Animations"],
     link: "https://tiktok-survey.vercel.app/",
   },
-  {
-    // TODO: replace every value below with your real ML project, or delete this object.
-    tone: "ml",
-    label: "Machine learning · Replace with your project",
-    title: "Your ML project name",
-    text: "One or two sentences: what problem the model solves, what data it used, and what it predicts.",
-    metrics: [
-      ["XX%", "accuracy on held-out test data"],
-      ["N rows", "in the cleaned dataset"],
-    ],
-    points: [
-      "Cleaned and preprocessed the data",
-      "Explored the data and chose features",
-      "Trained and compared models, then evaluated the best one",
-    ],
-    tags: ["Python", "pandas", "scikit-learn"],
-    link: "", // link to your notebook or repo
-    linkText: "View the notebook",
-  },
 ];
 
-function Demo() {
-  const [hours, setHours] = useState(6);
-  const [attendance, setAttendance] = useState(80);
-  const [score, setScore] = useState(null);
-  // Stand-in formula. Replace with a fetch("/api/predict") call to your real model.
-  const predict = () => setScore(Math.round(Math.min(100, Math.max(0, 20 + hours * 5 + (attendance - 50) * 0.5))));
-  return (
-    <div className="demo">
-      <label>Study hours per day <b>{hours}</b></label>
-      <input type="range" min="0" max="10" value={hours} onChange={(e) => setHours(+e.target.value)} aria-label="Study hours per day" />
-      <label>Attendance <b>{attendance}%</b></label>
-      <input type="range" min="50" max="100" value={attendance} onChange={(e) => setAttendance(+e.target.value)} aria-label="Attendance percent" />
-      <div className="demo-run">
-        <button onClick={predict}>Predict score</button>
-        <div className="score" aria-live="polite">
-          {score ?? "--"}
-          <small>{score === null ? "Press predict" : "Predicted exam score"}</small>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function App() {
-  const [tab, setTab] = useState("Live demo");
-  const isDemo = tab === "Live demo";
+  const [tab, setTab] = useState("Frontend");
   const snip = snippets[tab];
-  const tone = tab === "Model" || isDemo ? "ml" : "web";
+  const tone = tab === "Model" ? "ml" : "web";
 
   return (
     <div className="app">
@@ -179,7 +136,7 @@ function App() {
 
             <div className="hero-card" data-tone={tone}>
               <div className="tabs" role="tablist">
-                {["Live demo", ...Object.keys(snippets)].map((t) => (
+                {Object.keys(snippets).map((t) => (
                   <button
                     key={t}
                     role="tab"
@@ -191,17 +148,11 @@ function App() {
                   </button>
                 ))}
               </div>
-              {isDemo ? (
-                <Demo />
-              ) : (
-                <>
-                  <div className="file-name">{snip.file}</div>
-                  <pre className="code-box">{snip.code}</pre>
-                </>
-              )}
+              <div className="file-name">{snip.file}</div>
+              <pre className="code-box">{snip.code}</pre>
               <div className="card-foot">
                 <span className="status-dot" />
-                {isDemo ? "Try it: the frontend asks, the model answers" : "Same person, whole pipeline"}
+                Same person, whole pipeline
               </div>
             </div>
           </div>
@@ -278,13 +229,6 @@ function App() {
                       </div>
                     </div>
                   )}
-                  {p.metrics && (
-                    <div className="metrics">
-                      {p.metrics.map(([v, l]) => (
-                        <div key={l}>{v}<small>{l}</small></div>
-                      ))}
-                    </div>
-                  )}
                   <h4>What I did</h4>
                   <ul>
                     {p.points.map((x) => (
@@ -298,7 +242,7 @@ function App() {
                   </div>
                   {p.link && (
                     <a href={p.link} target="_blank" rel="noreferrer" className="project-link">
-                      {p.linkText || "View live project"}
+                      View live project
                     </a>
                   )}
                 </article>

@@ -56,7 +56,7 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.1; }
   min-width: 0; --c: var(--web);
   background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--c);
   border-radius: 14px; padding: 20px; transition: border-color 0.3s;
-  height: 380px; display: flex; flex-direction: column; contain: layout size;
+  height: 360px; display: flex; flex-direction: column; contain: layout size;
 }
 .hero-card[data-tone="ml"] { --c: var(--ml); }
 .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-shrink: 0; flex-wrap: wrap; }
@@ -71,17 +71,6 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.1; }
 }
 .card-foot { display: flex; align-items: center; gap: 9px; margin-top: 14px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
-
-/* LIVE DEMO (inside hero card) */
-.demo { flex: 1; min-height: 0; background: var(--bg); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px; overflow: auto; }
-.demo label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
-.demo label b { color: var(--text); font-weight: 500; }
-.demo input[type="range"] { width: 100%; accent-color: var(--ml); margin-top: 4px; }
-.demo-run { display: flex; align-items: center; gap: 16px; margin-top: auto; }
-.demo-run button { font: inherit; font-weight: 700; font-size: 14px; padding: 9px 18px; border-radius: 9px; border: 0; cursor: pointer; background: var(--ml); color: var(--bg); }
-.demo-run button:hover { filter: brightness(1.1); }
-.score { font-family: var(--display); font-size: 40px; font-weight: 700; color: var(--ml); min-width: 4ch; }
-.score small { font-family: "DM Sans", sans-serif; font-size: 13px; font-weight: 400; color: var(--muted); display: block; line-height: 1.3; }
 
 /* PIPELINE (sequence: data and model on the ML side, API and app on the web side) */
 .pipeline { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 36px; counter-reset: stage; }
@@ -147,9 +136,6 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.1; }
 .frame-bar span { margin-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .frame-view { height: 320px; position: relative; overflow: hidden; }
 .frame-view iframe { width: 200%; height: 200%; border: 0; transform: scale(0.5); transform-origin: 0 0; pointer-events: none; }
-.metrics { display: flex; flex-wrap: wrap; gap: 28px; margin-bottom: 24px; }
-.metrics div { font-family: var(--display); font-size: 34px; font-weight: 700; color: var(--c); line-height: 1; }
-.metrics small { display: block; margin-top: 6px; font-family: "DM Sans", sans-serif; font-size: 13px; font-weight: 400; color: var(--muted); }
 
 /* PROCESS */
 .process { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
