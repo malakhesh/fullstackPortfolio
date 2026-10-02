@@ -210,7 +210,7 @@ function App() {
         <section id="projects" className="section">
           <div className="container">
             <div className="section-heading">
-              <h2>Selected projects</h2>
+              <h2>projects</h2>
             </div>
             <div className="projects">
               {projects.map((p) => (
