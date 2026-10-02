@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./index.css";
 
 const snippets = {
@@ -28,13 +28,6 @@ print(evaluate(model, X_test))`,
   },
 };
 
-const palettes = {
-  teal: ["#0d1b22", "#6fcfb0", "#f2a65a"],
-  violet: ["#14122b", "#8b9cff", "#ff8fb1"],
-  burgundy: ["#1c1018", "#ff9e7a", "#c9a0ff"],
-  paper: ["#f4f7f5", "#1f8a70", "#c9722a"],
-};
-
 const skills = [
   { title: "Frontend", tone: "web", items: ["HTML", "CSS", "JavaScript", "React", "Responsive design"] },
   { title: "Backend", tone: "web", items: ["Node.js", "Express", "REST APIs", "Authentication", "Server-side logic"] },
@@ -62,6 +55,7 @@ const process = [
 
 const projects = [
   {
+    tone: "web",
     label: "Full-stack · University project",
     title: "Graduation Projects Gallery",
     text: "A platform where university students showcase and explore graduation projects. I handled most of the application, excluding the landing page and admin dashboard.",
@@ -77,6 +71,7 @@ const projects = [
     link: "https://graduation-projects-gallery.vercel.app/",
   },
   {
+    tone: "web",
     label: "Frontend · Creative project",
     title: "TikTok Survey Presentation",
     text: "An interactive presentation of survey results about TikTok usage and ideas to improve the platform, turning raw survey data into a visual story.",
@@ -89,16 +84,55 @@ const projects = [
     tags: ["HTML", "CSS", "JavaScript", "Animations"],
     link: "https://tiktok-survey.vercel.app/",
   },
+  {
+    // TODO: replace every value below with your real ML project, or delete this object.
+    tone: "ml",
+    label: "Machine learning · Replace with your project",
+    title: "Your ML project name",
+    text: "One or two sentences: what problem the model solves, what data it used, and what it predicts.",
+    metrics: [
+      ["XX%", "accuracy on held-out test data"],
+      ["N rows", "in the cleaned dataset"],
+    ],
+    points: [
+      "Cleaned and preprocessed the data",
+      "Explored the data and chose features",
+      "Trained and compared models, then evaluated the best one",
+    ],
+    tags: ["Python", "pandas", "scikit-learn"],
+    link: "", // link to your notebook or repo
+    linkText: "View the notebook",
+  },
 ];
 
+function Demo() {
+  const [hours, setHours] = useState(6);
+  const [attendance, setAttendance] = useState(80);
+  const [score, setScore] = useState(null);
+  // Stand-in formula. Replace with a fetch("/api/predict") call to your real model.
+  const predict = () => setScore(Math.round(Math.min(100, Math.max(0, 20 + hours * 5 + (attendance - 50) * 0.5))));
+  return (
+    <div className="demo">
+      <label>Study hours per day <b>{hours}</b></label>
+      <input type="range" min="0" max="10" value={hours} onChange={(e) => setHours(+e.target.value)} aria-label="Study hours per day" />
+      <label>Attendance <b>{attendance}%</b></label>
+      <input type="range" min="50" max="100" value={attendance} onChange={(e) => setAttendance(+e.target.value)} aria-label="Attendance percent" />
+      <div className="demo-run">
+        <button onClick={predict}>Predict score</button>
+        <div className="score" aria-live="polite">
+          {score ?? "--"}
+          <small>{score === null ? "Press predict" : "Predicted exam score"}</small>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
-  const [tab, setTab] = useState("Frontend");
-  const [theme, setTheme] = useState("teal");
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  const [tab, setTab] = useState("Live demo");
+  const isDemo = tab === "Live demo";
   const snip = snippets[tab];
-  const tone = tab === "Model" ? "ml" : "web";
+  const tone = tab === "Model" || isDemo ? "ml" : "web";
 
   return (
     <div className="app">
@@ -135,11 +169,17 @@ function App() {
                 <a href="#projects" className="button primary">View my work</a>
                 <a href="#contact" className="button secondary">Let's talk</a>
               </div>
+              <ol className="pipeline" aria-label="My workflow">
+                <li className="ml">Data</li>
+                <li className="ml">Model</li>
+                <li className="web">API</li>
+                <li className="web">App</li>
+              </ol>
             </div>
 
             <div className="hero-card" data-tone={tone}>
               <div className="tabs" role="tablist">
-                {Object.keys(snippets).map((t) => (
+                {["Live demo", ...Object.keys(snippets)].map((t) => (
                   <button
                     key={t}
                     role="tab"
@@ -151,10 +191,17 @@ function App() {
                   </button>
                 ))}
               </div>
-              <div className="file-name">{snip.file}</div>
-              <pre className="code-box">{snip.code}</pre>
+              {isDemo ? (
+                <Demo />
+              ) : (
+                <>
+                  <div className="file-name">{snip.file}</div>
+                  <pre className="code-box">{snip.code}</pre>
+                </>
+              )}
               <div className="card-foot">
-                <span className="status-dot" /> Same person, whole pipeline
+                <span className="status-dot" />
+                {isDemo ? "Try it: the frontend asks, the model answers" : "Same person, whole pipeline"}
               </div>
             </div>
           </div>
@@ -216,10 +263,28 @@ function App() {
             </div>
             <div className="projects">
               {projects.map((p) => (
-                <article className="project-card" key={p.title}>
+                <article className="project-card" data-tone={p.tone} key={p.title}>
                   <div className="project-label">{p.label}</div>
                   <h3>{p.title}</h3>
                   <p>{p.text}</p>
+                  {p.tone === "web" && (
+                    <div className="frame">
+                      <div className="frame-bar">
+                        <i /><i /><i />
+                        <span>{p.link.replace("https://", "")}</span>
+                      </div>
+                      <div className="frame-view">
+                        <iframe src={p.link} title={`${p.title} preview`} loading="lazy" tabIndex={-1} aria-hidden="true" />
+                      </div>
+                    </div>
+                  )}
+                  {p.metrics && (
+                    <div className="metrics">
+                      {p.metrics.map(([v, l]) => (
+                        <div key={l}>{v}<small>{l}</small></div>
+                      ))}
+                    </div>
+                  )}
                   <h4>What I did</h4>
                   <ul>
                     {p.points.map((x) => (
@@ -231,9 +296,11 @@ function App() {
                       <span key={t}>{t}</span>
                     ))}
                   </div>
-                  <a href={p.link} target="_blank" rel="noreferrer" className="project-link">
-                    View live project
-                  </a>
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noreferrer" className="project-link">
+                      {p.linkText || "View live project"}
+                    </a>
+                  )}
                 </article>
               ))}
             </div>
@@ -290,18 +357,6 @@ function App() {
           </div>
         </section>
       </main>
-
-      <div className="palettes" aria-label="Color palette preview">
-        {Object.entries(palettes).map(([name, [bg, a, b]]) => (
-          <button
-            key={name}
-            title={name}
-            aria-pressed={theme === name}
-            onClick={() => setTheme(name)}
-            style={{ background: `linear-gradient(135deg, ${bg} 40%, ${a} 40% 70%, ${b} 70%)` }}
-          />
-        ))}
-      </div>
 
       <footer>
         <div className="container footer-content">
